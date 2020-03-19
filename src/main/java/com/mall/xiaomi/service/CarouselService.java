@@ -1,6 +1,13 @@
 package com.mall.xiaomi.service;
 
+import com.mall.xiaomi.exception.ExceptionEnum;
+import com.mall.xiaomi.exception.XmException;
+import com.mall.xiaomi.mapper.CarouselMapper;
+import com.mall.xiaomi.pojo.Carousel;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 /**
  * @Auther: wdd
@@ -9,4 +16,22 @@ import org.springframework.stereotype.Service;
  */
 @Service
 public class CarouselService {
+
+    @Autowired
+    private CarouselMapper carouselMapper;
+
+    public List<Carousel> getCarouselList() {
+        List<Carousel> list = null;
+        try {
+            list = carouselMapper.selectAll();
+            if (list.isEmpty()) {
+                throw new XmException(ExceptionEnum.GET_CAROUSEL_NOT_FOUND);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new XmException(ExceptionEnum.GET_CAROUSEL_ERROR);
+        }
+        return list;
+    }
+
 }
