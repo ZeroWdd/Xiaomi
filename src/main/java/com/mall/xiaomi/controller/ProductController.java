@@ -23,7 +23,7 @@ public class ProductController {
     @Autowired
     private ProductService productService;
 
-    @GetMapping("/category/{categoryId}")
+    @GetMapping("/category/limit/{categoryId}")
     public ResultMessage getProductByCategoryId(@PathVariable Integer categoryId) {
         List<Product> list = productService.getProductByCategoryId(categoryId);
         resultMessage.success("001", list);

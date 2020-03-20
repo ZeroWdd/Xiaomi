@@ -25,10 +25,12 @@ public class ProductService {
 
     public List<Product> getProductByCategoryId(Integer categoryId) {
         List<Product> list = null;
-        Product product = new Product();
-        product.setCategoryId(categoryId);
+        Example example = new Example(Product.class);
+        example.orderBy("productSales").desc();
+        example.createCriteria().andEqualTo("categoryId", categoryId);
+        PageHelper.startPage(0, 8);
         try {
-            list = productMapper.select(product);
+            list = productMapper.selectByExample(example);
             if (list.isEmpty()) {
                 throw new XmException(ExceptionEnum.GET_PRODUCT_NOT_FOUND);
             }
@@ -43,9 +45,17 @@ public class ProductService {
         Example example = new Example(Product.class);
         example.orderBy("productSales").desc();
 
-        PageHelper.startPage(0, 7);
-        List<Product> list = productMapper.selectByExample(example);
-
+        PageHelper.startPage(0, 8);
+        List<Product> list = null;
+        try {
+            list = productMapper.selectByExample(example);
+            if (list.isEmpty()) {
+                throw new XmException(ExceptionEnum.GET_PRODUCT_NOT_FOUND);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new XmException(ExceptionEnum.GET_PRODUCT_ERROR);
+        }
         return list;
     }
 }
