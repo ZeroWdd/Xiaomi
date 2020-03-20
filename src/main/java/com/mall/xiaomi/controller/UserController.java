@@ -1,6 +1,19 @@
 package com.mall.xiaomi.controller;
 
-import org.springframework.web.bind.annotation.RestController;
+import com.mall.xiaomi.pojo.User;
+import com.mall.xiaomi.service.UserService;
+import com.mall.xiaomi.util.BeanUtil;
+import com.mall.xiaomi.util.CookieUtil;
+import com.mall.xiaomi.util.MD5Util;
+import com.mall.xiaomi.util.ResultMessage;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.web.bind.annotation.*;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.util.Map;
+import java.util.concurrent.TimeUnit;
 
 /**
  * @Auther: wdd
@@ -8,5 +21,79 @@ import org.springframework.web.bind.annotation.RestController;
  * @Description:
  */
 @RestController
+@RequestMapping("/user")
 public class UserController {
+
+    @Autowired
+    private ResultMessage resultMessage;
+    @Autowired
+    private RedisTemplate redisTemplate;
+    @Autowired
+    private UserService userService;
+
+    /**
+     * 用户登录
+     * @param user
+     * @param request
+     * @param response
+     * @return
+     */
+    @PostMapping("/login")
+    public ResultMessage login(@RequestBody User user, HttpServletRequest request, HttpServletResponse response) {
+        user = userService.login(user);
+        // 添加cookie，设置唯一认证
+        String encode = MD5Util.MD5Encode(user.getUsername() + user.getPassword(), "UTF-8");
+        CookieUtil.setCookie(request, response, "XM_TOKEN", encode, 1800);
+        // 将encode放入redis中，用于认证
+        try {
+            redisTemplate.opsForHash().putAll(encode, BeanUtil.bean2map(user));
+            redisTemplate.expire(encode, 30 * 60, TimeUnit.SECONDS); // 设置过期时间
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        // 将密码设为null,返回给前端
+        user.setPassword(null);
+        resultMessage.success("001", "登录成功", user);
+        return resultMessage;
+    }
+
+    /**
+     * 用户注册
+     * @param user
+     * @return
+     */
+    @PostMapping("/register")
+    public ResultMessage register(@RequestBody User user) {
+        userService.register(user);
+        resultMessage.success("001", "注册成功");
+        return resultMessage;
+    }
+
+    /**
+     * 判断用户名是否已存在
+     * @param username
+     * @return
+     */
+    @GetMapping("/username/{username}")
+    public ResultMessage username(@PathVariable String username) {
+        userService.isUserName(username);
+        resultMessage.success("001", "可注册");
+        return resultMessage;
+    }
+
+    /**
+     * 根据token获取用户信息
+     * @param token
+     * @return
+     */
+    @GetMapping("/token")
+    public ResultMessage token(@CookieValue("XM_TOKEN") String token) throws Exception {
+        Map map = redisTemplate.opsForHash().entries(token);
+        redisTemplate.expire(token, 30 * 60, TimeUnit.SECONDS); // 设置过期时间
+        User user = BeanUtil.map2bean(map, User.class);
+        user.setPassword(null);
+        resultMessage.success("001", user);
+        return resultMessage;
+    }
+
 }

@@ -21,7 +21,7 @@ public class XmExceptionHandler {
     @ExceptionHandler(XmException.class)
     public ResultMessage handleException(XmException e){
         ExceptionEnum em = e.getExceptionEnum();
-        resultMessage.fail("002", "异常");
+        resultMessage.fail(em.getCode() + "", em.getMsg());
         return resultMessage;
     }
 }
