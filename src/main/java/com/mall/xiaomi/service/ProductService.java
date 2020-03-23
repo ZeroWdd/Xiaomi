@@ -1,11 +1,13 @@
 package com.mall.xiaomi.service;
 
 import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
 import com.mall.xiaomi.exception.ExceptionEnum;
 import com.mall.xiaomi.exception.XmException;
 import com.mall.xiaomi.mapper.ProductMapper;
 import com.mall.xiaomi.pojo.Product;
 import org.apache.commons.lang3.ArrayUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import tk.mybatis.mapper.entity.Example;
@@ -72,5 +74,20 @@ public class ProductService {
             throw new XmException(ExceptionEnum.GET_PRODUCT_ERROR);
         }
         return product;
+    }
+
+    public PageInfo<Product> getProductByPage(String currentPage, String pageSize, String categoryId) {
+        List<Product> list = null;
+        PageHelper.startPage(Integer.parseInt(currentPage) - 1, Integer.parseInt(pageSize), true);
+        if (categoryId.equals("0")) { // 为0，代表分页查询所有商品
+            list = productMapper.selectAll();
+        }else {
+            // 分类分页查询商品
+            Product product = new Product();
+            product.setCategoryId(Integer.parseInt(categoryId));
+            list = productMapper.select(product);
+        }
+        PageInfo<Product> pageInfo = new PageInfo<Product>(list);
+        return pageInfo;
     }
 }

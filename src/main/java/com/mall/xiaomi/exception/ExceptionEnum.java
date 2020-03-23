@@ -24,6 +24,10 @@ public enum ExceptionEnum {
     GET_PRODUCT_PICTURE_ERROR(002, "商品图片查询失败"),
     GET_PRODUCT_PICTURE_NOT_FOUND(002, "商品图片为空"),
 
+
+    GET_CATEGORY_ERROR(002, "分类查询异常"),
+    GET_CATEGORY_NOT_FOUND(002, "分类查询为空"),
+
     GET_USER_NOT_FOUND(002, "用户名或密码错误"),
     SAVE_USER_REUSE(002, "用户名已存在"),
     SAVE_USER_ERROR(002, "注册用户失败"),

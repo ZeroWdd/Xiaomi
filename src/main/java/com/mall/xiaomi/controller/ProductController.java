@@ -1,12 +1,15 @@
 package com.mall.xiaomi.controller;
 
+import com.github.pagehelper.PageInfo;
 import com.mall.xiaomi.pojo.Product;
 import com.mall.xiaomi.service.ProductService;
 import com.mall.xiaomi.util.ResultMessage;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * @Auther: wdd
@@ -43,6 +46,16 @@ public class ProductController {
         Product product = productService.getProductById(productId);
         resultMessage.success("001", product);
         return resultMessage;
+    }
+
+    @GetMapping("/page/{currentPage}/{pageSize}/{categoryId}")
+    public Map<String, Object> getProductByPage(@PathVariable String currentPage, @PathVariable String pageSize, @PathVariable String categoryId) {
+        PageInfo<Product> pageInfo = productService.getProductByPage(currentPage, pageSize, categoryId);
+        HashMap<String, Object> map = new HashMap<>();
+        map.put("code", "001");
+        map.put("data", pageInfo.getList());
+        map.put("total", pageInfo.getTotal());
+        return map;
     }
 
 }
