@@ -7,7 +7,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Map;
 
 /**
  * @Auther: wdd
@@ -37,6 +36,13 @@ public class ProductController {
         resultMessage.success("001", list);
         return resultMessage;
 
+    }
+
+    @GetMapping("/{productId}")
+    public ResultMessage getProduct(@PathVariable String productId) {
+        Product product = productService.getProductById(productId);
+        resultMessage.success("001", product);
+        return resultMessage;
     }
 
 }

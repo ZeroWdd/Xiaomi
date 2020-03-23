@@ -59,4 +59,18 @@ public class ProductService {
         }
         return list;
     }
+
+    public Product getProductById(String productId) {
+        Product product = null;
+        try {
+            product = productMapper.selectByPrimaryKey(productId);
+            if (product == null) {
+                throw new XmException(ExceptionEnum.GET_PRODUCT_NOT_FOUND);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new XmException(ExceptionEnum.GET_PRODUCT_ERROR);
+        }
+        return product;
+    }
 }
