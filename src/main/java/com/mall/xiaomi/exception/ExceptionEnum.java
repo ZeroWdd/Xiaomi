@@ -24,6 +24,13 @@ public enum ExceptionEnum {
     SAVE_USER_REUSE(002, "用户名已存在"),
     SAVE_USER_ERROR(002, "注册用户失败"),
 
+
+
+    GET_CART_ERROR(002, "购物车异常"),
+    GET_CART_NOT_FOUND(002, "购物车为空"),
+
+
+
     ;
     private int code;
     private String msg;

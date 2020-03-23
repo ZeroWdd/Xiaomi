@@ -146,6 +146,18 @@ public final class CookieUtil {
 		}
 	}
 
+	public static final void delCookie(HttpServletRequest request, String cookieName) {
+		Cookie[] cookies = request.getCookies(); // 获取cookie数组
+		for (Cookie cookie : cookies) {
+			if (cookieName.equals(cookie.getName())) {
+				Cookie c = new Cookie(cookie.getName(), null);  // 删除前必须要new 一个value为空；
+				c.setPath("/");  // 路径要相同
+				c.setMaxAge(0);  // 生命周期设置为0
+				break;
+			}
+		}
+	}
+
 	/**
 	 * 得到cookie的域名
 	 */

@@ -5,6 +5,7 @@ import com.mall.xiaomi.exception.ExceptionEnum;
 import com.mall.xiaomi.exception.XmException;
 import com.mall.xiaomi.mapper.ProductMapper;
 import com.mall.xiaomi.pojo.Product;
+import org.apache.commons.lang3.ArrayUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import tk.mybatis.mapper.entity.Example;
@@ -31,7 +32,7 @@ public class ProductService {
         PageHelper.startPage(0, 8);
         try {
             list = productMapper.selectByExample(example);
-            if (list.isEmpty()) {
+            if (ArrayUtils.isEmpty(list.toArray())) {
                 throw new XmException(ExceptionEnum.GET_PRODUCT_NOT_FOUND);
             }
         } catch (Exception e) {
@@ -49,7 +50,7 @@ public class ProductService {
         List<Product> list = null;
         try {
             list = productMapper.selectByExample(example);
-            if (list.isEmpty()) {
+            if (ArrayUtils.isEmpty(list.toArray())) {
                 throw new XmException(ExceptionEnum.GET_PRODUCT_NOT_FOUND);
             }
         } catch (Exception e) {
