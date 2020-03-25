@@ -11,7 +11,7 @@ public class Order {
     @GeneratedValue(strategy = GenerationType.IDENTITY,generator = "JDBC")
     private Integer id;
 
-    private Long orderId;
+    private String orderId;
 
     private Integer userId;
 
