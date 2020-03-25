@@ -38,6 +38,13 @@ public enum ExceptionEnum {
     GET_CART_NOT_FOUND(002, "购物车为空"),
 
 
+    SAVE_COLLECT_ERROR(002, "收藏失败"),
+    SAVE_COLLECT_REUSE(002, "已收藏，请勿重复收藏"),
+    GET_COLLECT_NOT_FOUND(002, "尚无商品收藏"),
+    GET_COLLECT_ERROR(002, "获取收藏失败"),
+    DELETE_COLLECT_ERROR(002, "删除收藏失败"),
+
+
 
     ;
     private int code;
