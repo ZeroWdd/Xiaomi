@@ -43,6 +43,8 @@ public class UserController {
         user = userService.login(user);
         // 添加cookie，设置唯一认证
         String encode = MD5Util.MD5Encode(user.getUsername() + user.getPassword(), "UTF-8");
+        // 进行加盐
+        encode += "|" + user.getUserId() + "|" + user.getUsername() + "|";
         CookieUtil.setCookie(request, response, "XM_TOKEN", encode, 1800);
         // 将encode放入redis中，用于认证
         try {
