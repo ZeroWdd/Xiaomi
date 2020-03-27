@@ -65,7 +65,7 @@ public class OrderService {
         cart.setUserId(userId);
         try {
             int count = cartMapper.delete(cart);
-            if (count != 1) {
+            if (count == 0) {
                 throw new XmException(ExceptionEnum.ADD_ORDER_ERROR);
             }
         } catch (Exception e) {
