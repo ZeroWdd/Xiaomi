@@ -52,6 +52,8 @@ public enum ExceptionEnum {
 
 
     ADD_ORDER_ERROR(002, "生成订单失败"),
+    GET_ORDER_NOT_FOUND(002, "订单为空"),
+    GET_ORDER_ERROR(002, "查询订单失败"),
 
 
 

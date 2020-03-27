@@ -10,12 +10,15 @@ import com.mall.xiaomi.pojo.Product;
 import com.mall.xiaomi.pojo.ShoppingCart;
 import com.mall.xiaomi.util.IdWorker;
 import com.mall.xiaomi.vo.CartVo;
+import com.mall.xiaomi.vo.OrderVo;
+import org.apache.commons.lang3.ArrayUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Date;
-import java.util.List;
+import java.util.*;
+import java.util.function.Predicate;
+import java.util.stream.Collectors;
 
 /**
  * @Auther: wdd
@@ -73,5 +76,24 @@ public class OrderService {
             throw new XmException(ExceptionEnum.ADD_ORDER_ERROR);
         }
 
+    }
+
+    public List<List<OrderVo>> getOrder(Integer userId) {
+        List<OrderVo> list = null;
+        ArrayList<List<OrderVo>> ret = new ArrayList<>();
+        try {
+            list = orderMapper.getOrderVoByUserId(userId);
+            if (ArrayUtils.isEmpty(list.toArray())) {
+                throw new XmException(ExceptionEnum.GET_ORDER_NOT_FOUND);
+            }
+            // 将同一个订单放在一组
+            Map<String, List<OrderVo>> collect = list.stream().collect(Collectors.groupingBy(Order::getOrderId));
+            Collection<List<OrderVo>> values = collect.values();
+            ret.addAll(values);
+        } catch (XmException e) {
+            e.printStackTrace();
+            throw new XmException(ExceptionEnum.GET_ORDER_ERROR);
+        }
+        return ret;
     }
 }
