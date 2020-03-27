@@ -7,6 +7,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 /**
  * @Auther: wdd
  * @Date: 2020-03-19 13:25
@@ -24,10 +26,10 @@ public class OrderController {
     private OrderService orderService;
 
     @PostMapping("")
-    public ResultMessage addOrder(@RequestBody CartVo cartVo, @CookieValue("XM_TOKEN") String cookie) {
+    public ResultMessage addOrder(@RequestBody List<CartVo> cartVoList, @CookieValue("XM_TOKEN") String cookie) {
         // 先判断cookie是否存在，和redis校验
         Integer userId = (Integer) redisTemplate.opsForHash().get(cookie, "userId");
-        orderService.addOrder(cartVo, userId);
+        orderService.addOrder(cartVoList, userId);
         resultMessage.success("001", "下单成功");
         return resultMessage;
     }

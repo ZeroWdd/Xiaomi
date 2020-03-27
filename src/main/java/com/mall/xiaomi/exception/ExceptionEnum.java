@@ -51,6 +51,9 @@ public enum ExceptionEnum {
     DELETE_CART_ERROR(003, "商品删除失败"),
 
 
+    ADD_ORDER_ERROR(002, "生成订单失败"),
+
+
 
     ;
     private int code;
