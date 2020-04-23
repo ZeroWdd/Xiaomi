@@ -55,7 +55,8 @@ public enum ExceptionEnum {
     GET_ORDER_NOT_FOUND(002, "订单为空"),
     GET_ORDER_ERROR(002, "查询订单失败"),
 
-
+    GET_SECKILL_NOT_FOUND(002, "尚无秒杀商品"),
+    GET_SECKILL_IS_OVER(002, "秒杀商品售罄"),
 
     ;
     private int code;

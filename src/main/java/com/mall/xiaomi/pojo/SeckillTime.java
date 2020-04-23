@@ -6,26 +6,22 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
-import java.io.Serializable;
 
 /**
  * @Auther: wdd
- * @Date: 2020-03-28 19:40
+ * @Date: 2020-04-22 20:57
  * @Description:
  */
 @Data
-@Table(name = "seckill_product")
-public class SeckillProduct implements Serializable {
+@Table(name = "seckill_time")
+public class SeckillTime {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY,generator = "JDBC")
-    private Integer seckillId;
-
-    private Integer productId;
-
-    private Double seckillPrice;
-
-    private Integer seckillStock;
-
     private Integer timeId;
+
+    private Long startTime;
+
+    private Long endTime;
+
 }
