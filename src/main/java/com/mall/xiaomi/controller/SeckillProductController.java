@@ -8,6 +8,7 @@ import com.mall.xiaomi.service.SeckillProductService;
 import com.mall.xiaomi.util.ResultMessage;
 import com.mall.xiaomi.vo.SeckillProductVo;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
@@ -27,6 +28,8 @@ public class SeckillProductController {
     private ResultMessage resultMessage;
     @Autowired
     private SeckillProductService seckillProductService;
+    @Autowired
+    private RedisTemplate redisTemplate;
 
     /**
      * 根据时间id获取对应时间的秒杀商品列表
@@ -81,9 +84,11 @@ public class SeckillProductController {
      * @return
      */
     @PostMapping("/seckill/{seckillId}")
-    public ResultMessage seckillProduct(@PathVariable String seckillId) {
-        seckillProductService.seckillProduct(seckillId);
-        resultMessage.success("001", "添加成功");
+    public ResultMessage seckillProduct(@PathVariable String seckillId, @CookieValue("XM_TOKEN") String cookie) {
+        // 先判断cookie是否存在，和redis校验
+        Integer userId = (Integer) redisTemplate.opsForHash().get(cookie, "userId");
+        seckillProductService.seckillProduct(seckillId, userId);
+        resultMessage.success("001", "排队中");
         return resultMessage;
     }
 

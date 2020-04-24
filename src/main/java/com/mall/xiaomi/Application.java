@@ -1,6 +1,7 @@
 package com.mall.xiaomi;
 
 import com.mall.xiaomi.util.IdWorker;
+import org.springframework.amqp.core.Queue;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
@@ -22,4 +23,10 @@ public class Application {
     public IdWorker getIdWork() {
         return new IdWorker();
     }
+
+    @Bean
+    public Queue queue() {
+        return new Queue("seckill_order",true);
+    }
+
 }

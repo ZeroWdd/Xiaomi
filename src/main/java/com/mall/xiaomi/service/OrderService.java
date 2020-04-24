@@ -4,15 +4,18 @@ import com.mall.xiaomi.exception.ExceptionEnum;
 import com.mall.xiaomi.exception.XmException;
 import com.mall.xiaomi.mapper.OrderMapper;
 import com.mall.xiaomi.mapper.ProductMapper;
+import com.mall.xiaomi.mapper.SeckillProductMapper;
 import com.mall.xiaomi.mapper.ShoppingCartMapper;
 import com.mall.xiaomi.pojo.Order;
 import com.mall.xiaomi.pojo.Product;
+import com.mall.xiaomi.pojo.SeckillProduct;
 import com.mall.xiaomi.pojo.ShoppingCart;
 import com.mall.xiaomi.util.IdWorker;
 import com.mall.xiaomi.vo.CartVo;
 import com.mall.xiaomi.vo.OrderVo;
 import org.apache.commons.lang3.ArrayUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -31,11 +34,17 @@ public class OrderService {
     @Autowired
     private IdWorker idWorker;
     @Autowired
+    private RedisTemplate redisTemplate;
+    @Autowired
     private OrderMapper orderMapper;
     @Autowired
     private ShoppingCartMapper cartMapper;
     @Autowired
     private ProductMapper productMapper;
+    @Autowired
+    private SeckillProductMapper seckillProductMapper;
+
+    private final static String SECKILL_PRODUCT_USER_LIST = "seckill:product:user:list";
 
     @Transactional
     public void addOrder(List<CartVo> cartVoList, Integer userId) {
@@ -95,5 +104,40 @@ public class OrderService {
             throw new XmException(ExceptionEnum.GET_ORDER_ERROR);
         }
         return ret;
+    }
+
+    @Transactional
+    public void addSeckillOrder(String seckillId, String userId) {
+        // 订单id
+        String orderId = idWorker.nextId() + "";
+        // 商品id
+        SeckillProduct seckillProduct = new SeckillProduct();
+        seckillProduct.setSeckillId(Integer.parseInt(seckillId));
+        SeckillProduct one = seckillProductMapper.selectOne(seckillProduct);
+        Integer productId = one.getProductId();
+        // 秒杀价格
+        Double price = one.getSeckillPrice();
+
+        // 订单封装
+        Order order = new Order();
+        order.setOrderId(orderId);
+        order.setProductId(productId);
+        order.setProductNum(1);
+        order.setUserId(Integer.parseInt(userId));
+        order.setOrderTime(new Date().getTime());
+        order.setProductPrice(price);
+
+        try {
+            orderMapper.insert(order);
+            // 减库存
+            seckillProductMapper.decrStock(one.getSeckillId());
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new XmException(ExceptionEnum.ADD_ORDER_ERROR);
+        }
+
+        // 订单创建成功, 将用户写入redis, 防止多次抢购
+        redisTemplate.opsForList().leftPush(SECKILL_PRODUCT_USER_LIST + seckillId, userId);
+
     }
 }

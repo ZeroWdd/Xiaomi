@@ -57,6 +57,8 @@ public enum ExceptionEnum {
 
     GET_SECKILL_NOT_FOUND(002, "尚无秒杀商品"),
     GET_SECKILL_IS_OVER(002, "秒杀商品售罄"),
+    GET_SECKILL_IS_REUSE(002, "秒杀重复"),
+    GET_SECKILL_IS_NOT_START(002, "秒杀尚未开始"),
 
     ;
     private int code;
