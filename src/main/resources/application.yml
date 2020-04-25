@@ -2,13 +2,13 @@ server:
   port: 3000
 spring:
   datasource:
-    url: jdbc:mysql://47.95.254.97:3306/xiaomi?characterEncoding=UTF8
+    url: jdbc:mysql://localhost:3306/xiaomi?characterEncoding=UTF8
     username: root
     password: root
   redis:
-    host: 47.95.254.97
+    host: localhost
   rabbitmq:
-    host: 47.95.254.97
+    host: localhost
 mybatis:
   configuration:
     mapUnderscoreToCamelCase: true
