@@ -8,13 +8,11 @@ import javax.persistence.*;
 @Table(name = "`user`")
 public class User {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY,generator = "JDBC")
+    @GeneratedValue(strategy = GenerationType.IDENTITY, generator = "JDBC")
     private Integer userId;
 
     private String username;
 
     private String password;
-
-    private String userPhoneNumber;
 
 }
