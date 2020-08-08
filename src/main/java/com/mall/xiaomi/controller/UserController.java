@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
@@ -45,7 +46,6 @@ public class UserController {
         String encode = MD5Util.MD5Encode(user.getUsername() + user.getPassword(), "UTF-8");
         // 进行加盐
         encode += "|" + user.getUserId() + "|" + user.getUsername() + "|";
-        CookieUtil.setCookie(request, response, "XM_TOKEN", encode, 1800);
         // 将encode放入redis中，用于认证
         try {
             redisTemplate.opsForHash().putAll(encode, BeanUtil.bean2map(user));
@@ -55,7 +55,11 @@ public class UserController {
         }
         // 将密码设为null,返回给前端
         user.setPassword(null);
-        resultMessage.success("001", "登录成功", user);
+        // TODO: 部署到linux中无法按cookie方式，只能当作参数返回        此处bug不知什么原因，只能这么写
+        Map<String, Object> map = new HashMap<>();
+        map.put("cookie", encode);
+        map.put("user", user);
+        resultMessage.success("001", "登录成功", map);
         return resultMessage;
     }
 
