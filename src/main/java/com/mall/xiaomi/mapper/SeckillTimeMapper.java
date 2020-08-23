@@ -21,4 +21,6 @@ public interface SeckillTimeMapper extends Mapper<SeckillTime> {
     @Delete("delete from seckill_time")
     void deleteAll();
 
+    @Select("select endTime from seckill_time where time_id = #{timeId}")
+    Long getEndTime(Integer timeId);
 }
