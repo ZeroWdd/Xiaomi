@@ -7,26 +7,27 @@ import javax.persistence.*;
 @Data
 @Table(name = "product")
 public class Product {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY,generator = "JDBC")
-    private Integer productId;
+        @Id
+        @GeneratedValue(strategy = GenerationType.IDENTITY, generator = "JDBC")
+        private Integer productId;
 
-    private String productName;
+        private String productName;
 
-    private Integer categoryId;
+        private Integer categoryId;
 
-    private String productTitle;
+        private String productTitle;
 
-    private String productPicture;
+        private String productPicture;
 
-    private Double productPrice;
+        private Double productPrice;
 
-    private Double productSellingPrice;
+        private Double productSellingPrice;
 
-    private Integer productNum;
+        private Integer productNum;
 
-    private Integer productSales;
+        private Integer productSales;
 
-    private String productIntro;
+        private String productIntro;
 
+        private Integer version;
 }

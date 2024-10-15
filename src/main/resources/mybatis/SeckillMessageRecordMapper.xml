@@ -1,0 +1,149 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.mall.xiaomi.mapper.SeckillMessageRecordMapper">
+  <resultMap id="BaseResultMap" type="com.mall.xiaomi.pojo.SeckillMessageRecord">
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="message_id" jdbcType="VARCHAR" property="messageId" />
+    <result column="user_id" jdbcType="VARCHAR" property="userId" />
+    <result column="seckill_id" jdbcType="VARCHAR" property="seckillId" />
+    <result column="status" jdbcType="VARCHAR" property="status" />
+    <result column="retry_count" jdbcType="INTEGER" property="retryCount" />
+    <result column="error_message" jdbcType="VARCHAR" property="errorMessage" />
+    <result column="created_at" jdbcType="TIMESTAMP" property="createdAt" />
+    <result column="updated_at" jdbcType="TIMESTAMP" property="updatedAt" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, message_id, user_id, seckill_id, `status`, retry_count, error_message, created_at,
+    updated_at
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from seckill_message_record
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+  <select id="findByMessageId" resultType="com.mall.xiaomi.pojo.SeckillMessageRecord">
+    select
+    <include refid="Base_Column_List" />
+    from seckill_message_record
+    where message_id = #{correlationId,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from seckill_message_record
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" keyColumn="id" keyProperty="id" parameterType="com.mall.xiaomi.pojo.SeckillMessageRecord" useGeneratedKeys="true">
+    insert into seckill_message_record (message_id, user_id, seckill_id,
+      `status`, retry_count, error_message,
+      created_at, updated_at)
+    values (#{messageId,jdbcType=VARCHAR}, #{userId,jdbcType=VARCHAR}, #{seckillId,jdbcType=VARCHAR},
+      #{status,jdbcType=VARCHAR}, #{retryCount,jdbcType=INTEGER}, #{errorMessage,jdbcType=VARCHAR},
+      #{createdAt,jdbcType=TIMESTAMP}, #{updatedAt,jdbcType=TIMESTAMP})
+  </insert>
+  <insert id="insertSelective" keyColumn="id" keyProperty="id" parameterType="com.mall.xiaomi.pojo.SeckillMessageRecord" useGeneratedKeys="true">
+    insert into seckill_message_record
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="messageId != null">
+        message_id,
+      </if>
+      <if test="userId != null">
+        user_id,
+      </if>
+      <if test="seckillId != null">
+        seckill_id,
+      </if>
+      <if test="status != null">
+        `status`,
+      </if>
+      <if test="retryCount != null">
+        retry_count,
+      </if>
+      <if test="errorMessage != null">
+        error_message,
+      </if>
+      <if test="createdAt != null">
+        created_at,
+      </if>
+      <if test="updatedAt != null">
+        updated_at,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="messageId != null">
+        #{messageId,jdbcType=VARCHAR},
+      </if>
+      <if test="userId != null">
+        #{userId,jdbcType=VARCHAR},
+      </if>
+      <if test="seckillId != null">
+        #{seckillId,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null">
+        #{status,jdbcType=VARCHAR},
+      </if>
+      <if test="retryCount != null">
+        #{retryCount,jdbcType=INTEGER},
+      </if>
+      <if test="errorMessage != null">
+        #{errorMessage,jdbcType=VARCHAR},
+      </if>
+      <if test="createdAt != null">
+        #{createdAt,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updatedAt != null">
+        #{updatedAt,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.mall.xiaomi.pojo.SeckillMessageRecord">
+    update seckill_message_record
+    <set>
+      <if test="messageId != null">
+        message_id = #{messageId,jdbcType=VARCHAR},
+      </if>
+      <if test="userId != null">
+        user_id = #{userId,jdbcType=VARCHAR},
+      </if>
+      <if test="seckillId != null">
+        seckill_id = #{seckillId,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null">
+        `status` = #{status,jdbcType=VARCHAR},
+      </if>
+      <if test="retryCount != null">
+        retry_count = #{retryCount,jdbcType=INTEGER},
+      </if>
+      <if test="errorMessage != null">
+        error_message = #{errorMessage,jdbcType=VARCHAR},
+      </if>
+      <if test="createdAt != null">
+        created_at = #{createdAt,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updatedAt != null">
+        updated_at = #{updatedAt,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.mall.xiaomi.pojo.SeckillMessageRecord">
+    update seckill_message_record
+    set message_id = #{messageId,jdbcType=VARCHAR},
+      user_id = #{userId,jdbcType=VARCHAR},
+      seckill_id = #{seckillId,jdbcType=VARCHAR},
+      `status` = #{status,jdbcType=VARCHAR},
+      retry_count = #{retryCount,jdbcType=INTEGER},
+      error_message = #{errorMessage,jdbcType=VARCHAR},
+      created_at = #{createdAt,jdbcType=TIMESTAMP},
+      updated_at = #{updatedAt,jdbcType=TIMESTAMP}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByMessageId" parameterType="com.mall.xiaomi.pojo.SeckillMessageRecord">
+    update seckill_message_record
+    set `status` = #{record.status,jdbcType=VARCHAR},
+        retry_count = #{record.retryCount,jdbcType=INTEGER},
+        error_message = #{record.errorMessage,jdbcType=VARCHAR},
+        updated_at = #{record.updatedAt,jdbcType=TIMESTAMP}
+
+    where message_id = #{record.messageId,jdbcType=VARCHAR}
+  </update>
+</mapper>
