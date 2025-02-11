@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.mall.xiaomi.mapper.ProductMapper">
+  <resultMap id="BaseResultMap" type="com.mall.xiaomi.pojo.Product">
+    <id column="product_id" jdbcType="INTEGER" property="productId" />
+    <result column="product_name" jdbcType="CHAR" property="productName" />
+    <result column="category_id" jdbcType="INTEGER" property="categoryId" />
+    <result column="product_title" jdbcType="CHAR" property="productTitle" />
+    <result column="product_intro" jdbcType="VARCHAR" property="productIntro" />
+    <result column="product_picture" jdbcType="CHAR" property="productPicture" />
+    <result column="product_price" jdbcType="DOUBLE" property="productPrice" />
+    <result column="product_selling_price" jdbcType="DOUBLE" property="productSellingPrice" />
+    <result column="product_num" jdbcType="INTEGER" property="productNum" />
+    <result column="product_sales" jdbcType="INTEGER" property="productSales" />
+    <result column="version" jdbcType="INTEGER" property="version" />
+  </resultMap>
+
+
+  <update id="updateStockByIdAndVersion" parameterType="map">
+    UPDATE product
+    SET product_num = product_num - #{saleNum},
+        version     = version + 1,
+        product_sales = product_sales + #{saleNum}
+    WHERE product_id = #{productId}
+      AND product_num >= #{saleNum}
+      AND version = #{currentVersion}
+  </update>
+
+
+</mapper>

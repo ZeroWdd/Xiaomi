@@ -10,19 +10,23 @@ import lombok.Data;
 @Data
 public class CartVo {
 
-    private Integer id;
+        private Integer id;
 
-    private Integer productId;
+        private Integer productId;
 
-    private String productName;
+        private String productName;
 
-    private String productImg;
+        private String productImg;
 
-    private Double price;
+        private Double price;
 
-    private Integer num;
+        private Integer num;
 
-    private Integer maxNum;
+        private Integer maxNum;
 
-    private boolean check;
+        private boolean check;
+
+        private boolean updateNum;
+
+        private String updateMessage;
 }

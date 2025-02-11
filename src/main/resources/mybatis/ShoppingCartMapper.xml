@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.mall.xiaomi.mapper.ShoppingCartMapper">
+  <resultMap id="BaseResultMap" type="com.mall.xiaomi.pojo.ShoppingCart">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="user_id" jdbcType="INTEGER" property="userId" />
+    <result column="product_id" jdbcType="INTEGER" property="productId" />
+    <result column="num" jdbcType="INTEGER" property="num" />
+    <result column="version" jdbcType="INTEGER" property="version" />
+  </resultMap>
+
+  <!-- 使用带有版本号判断的条件更新购物车 -->
+  <update id="updateCartByIdAndVersion" parameterType="com.mall.xiaomi.pojo.ShoppingCart"  >
+    UPDATE shopping_cart
+    SET num     = #{cart.num},
+        version = version + 1
+    WHERE id = #{cart.id}
+      AND version = #{cart.version}
+  </update>
+</mapper>
