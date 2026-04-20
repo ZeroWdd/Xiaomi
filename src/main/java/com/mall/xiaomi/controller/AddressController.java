@@ -5,6 +5,7 @@ import com.mall.xiaomi.service.AddressService;
 import com.mall.xiaomi.util.ResultMessage;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -28,7 +29,8 @@ public class AddressController {
     }
 
     @PostMapping("")
-    public ResultMessage addAddress(@RequestBody Address address, @CookieValue(value = "XM_TOKEN", required = false) String cookie) {
+    public ResultMessage addAddress(@Validated(Address.AddGroup.class) @RequestBody Address address, 
+                                     @CookieValue(value = "XM_TOKEN", required = false) String cookie) {
         if (cookie != null) {
             Integer userId = (Integer) redisTemplate.opsForHash().get(cookie, "userId");
             if (userId != null) {
@@ -41,7 +43,8 @@ public class AddressController {
     }
 
     @PutMapping("")
-    public ResultMessage updateAddress(@RequestBody Address address, @CookieValue(value = "XM_TOKEN", required = false) String cookie) {
+    public ResultMessage updateAddress(@Validated(Address.UpdateGroup.class) @RequestBody Address address, 
+                                        @CookieValue(value = "XM_TOKEN", required = false) String cookie) {
         if (cookie != null) {
             Integer userId = (Integer) redisTemplate.opsForHash().get(cookie, "userId");
             if (userId != null) {
@@ -54,7 +57,8 @@ public class AddressController {
     }
 
     @DeleteMapping("/{addressId}")
-    public ResultMessage deleteAddress(@PathVariable String addressId, @CookieValue(value = "XM_TOKEN", required = false) String cookie) {
+    public ResultMessage deleteAddress(@PathVariable String addressId, 
+                                        @CookieValue(value = "XM_TOKEN", required = false) String cookie) {
         String userId = null;
         if (cookie != null) {
             Integer userIdInt = (Integer) redisTemplate.opsForHash().get(cookie, "userId");

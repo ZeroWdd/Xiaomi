@@ -7,6 +7,8 @@ import com.mall.xiaomi.pojo.Address;
 import org.apache.commons.lang3.ArrayUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Isolation;
+import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
@@ -33,9 +35,12 @@ public class AddressService {
         return list;
     }
 
-    @Transactional
+    @Transactional(propagation = Propagation.REQUIRED, isolation = Isolation.READ_COMMITTED, rollbackFor = Exception.class)
     public void addAddress(Address address) {
         try {
+            if (address.getIsDefault() == null) {
+                address.setIsDefault(0);
+            }
             if (address.getIsDefault() == 1) {
                 resetDefaultAddress(address.getUserId());
             }
@@ -49,10 +54,10 @@ public class AddressService {
         }
     }
 
-    @Transactional
+    @Transactional(propagation = Propagation.REQUIRED, isolation = Isolation.READ_COMMITTED, rollbackFor = Exception.class)
     public void updateAddress(Address address) {
         try {
-            if (address.getIsDefault() == 1) {
+            if (address.getIsDefault() != null && address.getIsDefault() == 1) {
                 resetDefaultAddress(address.getUserId());
             }
             int count = addressMapper.updateByPrimaryKeySelective(address);
@@ -65,7 +70,7 @@ public class AddressService {
         }
     }
 
-    @Transactional
+    @Transactional(propagation = Propagation.REQUIRED, rollbackFor = Exception.class)
     public void deleteAddress(String addressId, String userId) {
         Address address = new Address();
         address.setId(Integer.parseInt(addressId));
@@ -90,5 +95,9 @@ public class AddressService {
             defaultAddress.setIsDefault(0);
             addressMapper.updateByPrimaryKeySelective(defaultAddress);
         }
+    }
+
+    public Address getById(String addressId) {
+        return addressMapper.selectByPrimaryKey(Integer.parseInt(addressId));
     }
 }
