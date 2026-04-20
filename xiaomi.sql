@@ -576,4 +576,21 @@ INSERT INTO `user` VALUES (17, 'jayjethava1', '7762dc5d78cb8366208b0c05b6fb14ea'
 INSERT INTO `user` VALUES (18, 'lh235762524001', '6cfa955a82ad67f24f8daaf0e6f6e09e', NULL);
 INSERT INTO `user` VALUES (19, 'liyiming', '31e09a2697bff307006cfd52cc202270', NULL);
 
+-- ----------------------------
+-- Table structure for address
+-- ----------------------------
+DROP TABLE IF EXISTS `address`;
+CREATE TABLE `address`  (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `user_id` int(11) NOT NULL,
+  `name` char(50) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
+  `phone` char(11) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
+  `province` char(50) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT NULL,
+  `city` char(50) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT NULL,
+  `district` char(50) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT NULL,
+  `detail` char(200) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
+  `is_default` int(11) DEFAULT 0,
+  PRIMARY KEY (`id`) USING BTREE
+) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
+
 SET FOREIGN_KEY_CHECKS = 1;

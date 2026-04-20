@@ -60,6 +60,12 @@ public enum ExceptionEnum {
     GET_SECKILL_IS_REUSE(002, "秒杀重复"),
     GET_SECKILL_IS_NOT_START(002, "秒杀尚未开始"),
 
+    GET_ADDRESS_ERROR(002, "地址查询失败"),
+    GET_ADDRESS_NOT_FOUND(002, "地址为空"),
+    ADD_ADDRESS_ERROR(002, "添加地址失败"),
+    UPDATE_ADDRESS_ERROR(002, "更新地址失败"),
+    DELETE_ADDRESS_ERROR(002, "删除地址失败"),
+
     ;
     private int code;
     private String msg;
