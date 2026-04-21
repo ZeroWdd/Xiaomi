@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.mall.xiaomi.mapper.AddressMapper">
+
+    <update id="resetDefaultAddressByUserId">
+        UPDATE address
+        SET is_default = 0
+        WHERE user_id = #{userId}
+          AND is_default = 1
+    </update>
+
+    <update id="setDefaultAddress">
+        UPDATE address
+        SET is_default = 1
+        WHERE id = #{addressId}
+          AND user_id = #{userId}
+    </update>
+
+</mapper>
