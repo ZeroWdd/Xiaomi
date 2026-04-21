@@ -1,11 +1,16 @@
 package com.mall.xiaomi.controller;
 
+import com.mall.xiaomi.exception.ExceptionEnum;
+import com.mall.xiaomi.exception.XmException;
 import com.mall.xiaomi.pojo.Address;
 import com.mall.xiaomi.pojo.ShoppingCart;
 import com.mall.xiaomi.service.AddressService;
 import com.mall.xiaomi.service.ShoppingCartService;
 import com.mall.xiaomi.util.ResultMessage;
 import com.mall.xiaomi.vo.CartVo;
+import org.apache.commons.lang3.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.validation.annotation.Validated;
@@ -21,6 +26,8 @@ import java.util.List;
 @RestController
 @RequestMapping("/cart")
 public class ShoppingCartController {
+
+        private static final Logger logger = LoggerFactory.getLogger(ShoppingCartController.class);
 
         @Autowired
         private ResultMessage resultMessage;
@@ -113,7 +120,9 @@ public class ShoppingCartController {
                         resultMessage.fail("002", "用户未登录");
                         return resultMessage;
                 }
-                addressService.setDefaultAddressById(Integer.parseInt(addressId), userId);
+                
+                Integer addressIdInt = parseAddressId(addressId);
+                addressService.setDefaultAddressById(addressIdInt, userId);
                 resultMessage.success("001", "设置默认地址成功");
                 return resultMessage;
         }
@@ -131,5 +140,18 @@ public class ShoppingCartController {
                 addressService.deleteAddress(addressId, userId);
                 resultMessage.success("001", "删除地址成功");
                 return resultMessage;
+        }
+
+        private Integer parseAddressId(String addressId) {
+                if (StringUtils.isBlank(addressId)) {
+                        logger.warn("Invalid addressId: {}", addressId);
+                        throw new XmException(ExceptionEnum.GET_ADDRESS_ERROR);
+                }
+                try {
+                        return Integer.parseInt(addressId);
+                } catch (NumberFormatException e) {
+                        logger.warn("Failed to parse addressId: {}", addressId, e);
+                        throw new XmException(ExceptionEnum.GET_ADDRESS_ERROR);
+                }
         }
 }
